@@ -51,6 +51,50 @@
 
 > ⚠️ **版本号错乱会导致"反复提示更新"或"更新了仍显示旧版"**。
 
+### 2.1 ★ 第四处：`latest.json` 的 `version` —— 必须与签名一致（实测确认）
+
+**2026-10-14 实测发现**：Tauri 的签名里**内嵌了版本号**，客户端会校验二者相等，
+不一致则**直接拒绝更新**（`tauri-plugin-updater/src/updater.rs:1816` `verify_signed_version`）。
+
+签名文件（`.sig`）解码后的第三行是 trusted comment，形如：
+
+```
+trusted comment: timestamp:1791981061	file:FeatherFind_0.1.1_x64-setup.exe	version:0.1.1
+```
+
+**规则**：
+
+| 项 | 要求 |
+|---|---|
+| `latest.json` 的 `version` | **必须**等于 `.sig` 里的 `version:` 字段 |
+| 不要手写 `version` | 从 `.sig` 的 trusted comment 里读出来填，或由脚本生成 |
+| 不要改 `version` 指向旧包 | 这是**防篡改设计**，改了会被拒（这正是它的用途） |
+
+**为什么容易踩**：`latest.json` 是纯文本，看着可以随手改版本号；
+但签名覆盖的是"这个版本号的包"，所以**改版本号而不重签名 = 更新必失败**。
+
+**校验命令**（发布前跑一次，零依赖）：
+
+```bash
+# 从签名里读出真实版本
+base64 -d FeatherFind_X.Y.Z_x64-setup.exe.sig | sed -n '3p' | tr '\t' '\n' | grep '^version:'
+# 与 latest.json 比对
+grep '"version"' latest.json
+```
+
+### 2.2 验签的完整机制（供排查用）
+
+客户端 `verify_signature()` 实际做了 **4 件事**，任一不过就中止：
+
+| # | 检查 | 说明 |
+|---|---|---|
+| 1 | **key id 配对** | 签名内的 key id 必须等于程序内置公钥的 key id |
+| 2 | **数据签名** | 签名算法 `ED`(0x4544) = 预哈希模式 → 先对安装包做 **BLAKE2b-64**，再 Ed25519 验签 |
+| 3 | **全局签名** | 覆盖 `(签名本身 + trusted comment 去掉 17 字符前缀)` —— 防止注释被改 |
+| 4 | **版本一致** | trusted comment 的 `version:` == 清单 `version` |
+
+> ⚠️ 注意第 2 条：是 **BLAKE2b**，不是 SHA-256/SHA-512。自己写校验脚本时最容易搞错。
+
 ---
 
 ## 3. 发布步骤（人工部分）

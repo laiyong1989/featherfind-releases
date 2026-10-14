@@ -19,19 +19,21 @@
 1. 打开本仓库的 [Releases](../../releases) 页面
 2. 下载最新版本的 `FeatherFind_x.y.z_x64-setup.exe`
 3. 双击安装（**per-user 安装，无需管理员权限**）
-4. 首次启动会引导你选择索引范围
-
-> 也提供 `FeatherFind_x.y.z_portable.zip`（绿色版，解压即用）。
+4. 启动后即可使用；索引范围可在侧栏中调整
 
 ---
 
 ## 自动更新
 
-程序内置更新检查（**默认关闭**，可在「设置 → 更新」中开启）。开启后：
+程序内置更新检查（**默认关闭**，可在侧栏「更新」中开启）。开启后：
 
-- 启动时（及每隔一段时间）访问本仓库的 `latest.json` 检查新版本
-- 发现新版本 → **状态栏提示**（不打断当前操作）
-- 用户确认后下载 → **minisign 签名校验** → 安装 → 提示重启生效
+- 每 24 小时（或你手动点击时）访问本仓库的 `latest.json` 检查新版本
+- 发现新版本 → **状态栏提示 + 侧栏角标**（不打断当前操作，不弹窗）
+- 你确认后下载 → **minisign 签名校验** → 校验通过才启动安装
+- 点击「退出并安装」后：程序退出 → 安装程序接管 → **自动打开新版本**
+
+> 更新过程中的下载进度、校验状态、失败原因都会在侧栏「更新」中如实显示。
+> 界面**不使用假进度**：无法获知文件大小时改用不确定进度条；下载完成前不会显示 100%。
 
 ### 隐私说明
 
@@ -41,23 +43,23 @@
 - ❌ **不上传**你的索引、文件列表、搜索历史或任何使用数据
 
 > 本程序「零上报」——即**不上传任何本地数据**；但「零上报」不等于「零联网」，
-> 更新检查是用户**显式开启**的可选功能。
+> 更新检查是用户**显式开启**的可选功能。关闭开关后，程序**不会**发起任何网络请求。
 
 ---
 
 ## 更新清单（latest.json）
 
-由 CI 自动生成并随 Release 上传，格式如下：
+随 Release 上传（与安装包**同一版本**），格式如下：
 
 ```json
 {
-  "version": "0.1.0",
-  "notes": "本次更新内容摘要",
-  "pub_date": "2026-10-14T12:00:00Z",
+  "version": "0.1.1",
+  "notes": "本次更新内容摘要（Markdown）",
+  "pub_date": "2026-10-14T12:31:02Z",
   "platforms": {
     "windows-x86_64": {
       "signature": "<minisign 签名>",
-      "url": "https://github.com/<owner>/featherfind-releases/releases/download/v0.1.0/FeatherFind_0.1.0_x64-setup.exe"
+      "url": "https://github.com/laiyong1989/featherfind-releases/releases/download/v0.1.1/FeatherFind_0.1.1_x64-setup.exe"
     }
   }
 }
@@ -66,8 +68,11 @@
 客户端读取路径（**不消耗 GitHub API 限额**）：
 
 ```
-https://github.com/<owner>/featherfind-releases/releases/latest/download/latest.json
+https://github.com/laiyong1989/featherfind-releases/releases/latest/download/latest.json
 ```
+
+> ⚠️ `version` 字段**必须**与安装包签名（`.sig`）内记录的版本一致，
+> 否则客户端会拒绝更新（这是防篡改设计）。详见 [`docs/RELEASE-PROCESS.md`](docs/RELEASE-PROCESS.md) §2.1。
 
 ---
 
