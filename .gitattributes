@@ -1,0 +1,23 @@
+# ============================================================
+#  FeatherFind Releases · 行尾规范化
+#
+#  ★ 关键：.sh 必须 LF。
+#  若被转成 CRLF，shebang（#!/usr/bin/env bash）会带上 \r，
+#  在 Linux CI 上执行时报 "bad interpreter: No such file or directory"。
+# ============================================================
+
+* text=auto eol=lf
+
+# Shell 脚本必须 LF（否则 shebang 失效）
+*.sh text eol=lf
+
+# Windows 批处理必须 CRLF（cmd 解析要求）
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 二进制不做转换
+*.exe binary
+*.msi binary
+*.zip binary
+*.dll binary
+*.sig binary
