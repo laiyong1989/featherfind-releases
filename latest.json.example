@@ -1,0 +1,11 @@
+{
+  "version": "0.1.0",
+  "notes": "首个版本：本地文件名/内容检索、台账筛选、MCP 接口、四后端索引降级链。",
+  "pub_date": "2026-10-14T12:00:00Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "PLACEHOLDER_MINISIGN_SIGNATURE",
+      "url": "https://github.com/OWNER/featherfind-releases/releases/download/v0.1.0/FeatherFind_0.1.0_x64-setup.exe"
+    }
+  }
+}

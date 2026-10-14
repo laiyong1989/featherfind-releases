@@ -1,0 +1,28 @@
+# ============================================================
+#  FeatherFind Releases 仓库 · Git 忽略规则
+#
+#  原则：本仓库只应包含"更新清单 + 说明文档"这类文本文件。
+#        二进制产物走 GitHub Releases（Release assets），
+#        不由 git 提交（避免仓库膨胀、clone 变慢）。
+# ============================================================
+
+# —— 构建产物：一律走 Release assets，不进 git ——
+*.exe
+*.msi
+*.zip
+*.dll
+*.sig
+
+# —— 但允许提交更新清单（显式豁免）——
+!latest.json
+
+# —— 系统 / 编辑器 ——
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# —— 临时文件 ——
+*.tmp
+*.log
