@@ -1,0 +1,33 @@
+# ============================================================
+#  公开发布仓 · 泄漏防护
+#
+#  为什么需要：本仓库是**公开**的，而源码仓含内网 IP 与公司业务信息。
+#  本工作流在每次推送时扫描，任何内部信息误入即**构建失败**，
+#  防止"公开发布仓被污染"这类不可逆事故。
+#
+#  扫描规则见 scripts/check-leaks.sh
+# ============================================================
+
+name: Leak Guard
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # 定期复查（防规则更新前的历史遗留）
+    - cron: "0 3 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  leak-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 敏感信息泄漏扫描
+        run: |
+          chmod +x scripts/check-leaks.sh
+          ./scripts/check-leaks.sh .
