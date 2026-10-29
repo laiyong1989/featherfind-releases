@@ -1,11 +1,11 @@
 {
-  "version": "0.1.0",
-  "notes": "首个版本：本地文件名/内容检索、台账筛选、MCP 接口、四后端索引降级链。",
-  "pub_date": "2026-10-14T12:00:00Z",
+  "version": "1.0.0",
+  "notes": "发布说明（Markdown，客户端会展示给用户）",
+  "pub_date": "2026-10-29T15:08:09Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "PLACEHOLDER_MINISIGN_SIGNATURE",
-      "url": "https://github.com/OWNER/featherfind-releases/releases/download/v0.1.0/FeatherFind_0.1.0_x64-setup.exe"
+      "signature": "<把 Cleariskind_1.0.0_x64-setup.exe.sig 的内容原样粘进来>",
+      "url": "https://github.com/laiyong1989/featherfind-releases/releases/download/v1.0.0/Cleariskind_1.0.0_x64-setup.exe"
     }
   }
 }
